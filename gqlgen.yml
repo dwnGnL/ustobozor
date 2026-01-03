@@ -1,0 +1,21 @@
+schema:
+  - internal/graphql/schema.graphqls
+exec:
+  filename: internal/graphql/generated/generated.go
+  package: generated
+model:
+  filename: internal/graphql/model/models_gen.go
+  package: model
+resolver:
+  layout: follow-schema
+  dir: internal/graphql/resolvers
+  package: resolvers
+  preserve_resolver: true
+
+models:
+  Time:
+    model:
+      - github.com/barzurustami/bozor/internal/graphql/model.Time
+  Upload:
+    model:
+      - github.com/99designs/gqlgen/graphql.Upload

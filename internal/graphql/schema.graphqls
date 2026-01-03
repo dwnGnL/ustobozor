@@ -1,0 +1,127 @@
+scalar Upload
+scalar Time
+
+type Query {
+  me: User
+  chats: [Chat!]!
+  chatMessages(chatId: ID!, limit: Int = 50, offset: Int = 0): [ChatMessage!]!
+}
+
+type Mutation {
+  requestSMSCode(phone: String!): Boolean!
+  register(input: RegisterInput!): AuthPayload!
+  login(input: LoginInput!): AuthPayload!
+  refreshToken(refreshToken: String!): AuthPayload!
+  createRequest(input: CreateRequestInput!): JobRequest!
+  createChat(requestId: ID!): Chat!
+  sendMessage(input: SendMessageInput!): ChatMessage!
+  markChatRead(chatId: ID!): [ChatMessage!]!
+  markMessageRead(messageId: ID!): ChatMessage!
+  uploadPhotos(input: UploadPhotosInput!): [Photo!]!
+  upsertProfile(input: ProfileInput!): Profile!
+}
+
+type Subscription {
+  chatMessageAdded(chatId: ID!): ChatMessage!
+  chatMessageRead(chatId: ID!): ChatMessage!
+}
+
+input RegisterInput {
+  phone: String!
+  code: String!
+}
+
+input LoginInput {
+  phone: String!
+  code: String!
+}
+
+input CreateRequestInput {
+  title: String!
+  description: String!
+  address: String
+}
+
+input UploadPhotosInput {
+  requestId: ID!
+  files: [Upload!]!
+}
+
+input ProfileInput {
+  fullName: String!
+  about: String
+  city: String
+  skills: [String!]
+}
+
+input SendMessageInput {
+  chatId: ID!
+  text: String
+  file: Upload
+}
+
+type AuthPayload {
+  user: User!
+  tokens: TokenPair!
+}
+
+type TokenPair {
+  accessToken: String!
+  refreshToken: String!
+  accessExpiresAt: Time!
+  refreshExpiresAt: Time!
+}
+
+type User {
+  id: ID!
+  phone: String!
+  roles: [Role!]!
+  profile: Profile
+}
+
+type Profile {
+  id: ID!
+  fullName: String!
+  about: String
+  city: String
+  skills: [String!]!
+}
+
+type JobRequest {
+  id: ID!
+  title: String!
+  description: String!
+  address: String
+  createdAt: Time!
+  photos: [Photo!]!
+}
+
+type Photo {
+  id: ID!
+  path: String!
+  createdAt: Time!
+}
+
+type Chat {
+  id: ID!
+  requestId: ID!
+  creatorId: ID!
+  initiatorId: ID!
+  createdAt: Time!
+  lastMessageAt: Time
+}
+
+type ChatMessage {
+  id: ID!
+  chatId: ID!
+  senderId: ID!
+  text: String
+  photo: String
+  createdAt: Time!
+  readAt: Time
+}
+
+enum Role {
+  CUSTOMER
+  WORKER
+}
