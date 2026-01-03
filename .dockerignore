@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env
+uploads
+bin
+*.exe
+*.out
+*.test
+*.log
+.DS_Store

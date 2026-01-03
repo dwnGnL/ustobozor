@@ -75,7 +75,6 @@ type TokenPair {
 type User {
   id: ID!
   phone: String!
-  roles: [Role!]!
   profile: Profile
 }
 
@@ -119,9 +118,4 @@ type ChatMessage {
   photo: String
   createdAt: Time!
   readAt: Time
-}
-
-enum Role {
-  CUSTOMER
-  WORKER
 }

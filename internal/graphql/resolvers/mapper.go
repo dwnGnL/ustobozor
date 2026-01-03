@@ -12,15 +12,9 @@ func toModelUser(user *domain.User, profile *domain.Profile) *model.User {
 		return nil
 	}
 
-	roles := make([]model.Role, 0, len(user.Roles))
-	for _, role := range user.Roles {
-		roles = append(roles, model.Role(role))
-	}
-
 	return &model.User{
 		ID:      user.ID.String(),
 		Phone:   user.Phone,
-		Roles:   roles,
 		Profile: toModelProfile(profile),
 	}
 }

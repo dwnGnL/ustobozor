@@ -79,7 +79,6 @@ func (s *AuthService) Register(ctx context.Context, phone, code string) (*domain
 	user := &domain.User{
 		ID:        uuid.New(),
 		Phone:     phone,
-		Roles:     []domain.Role{domain.RoleCustomer, domain.RoleWorker},
 		CreatedAt: time.Now().UTC(),
 	}
 

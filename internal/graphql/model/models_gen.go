@@ -3,11 +3,6 @@
 package model
 
 import (
-	"bytes"
-	"fmt"
-	"io"
-	"strconv"
-
 	"github.com/99designs/gqlgen/graphql"
 )
 
@@ -111,61 +106,5 @@ type UploadPhotosInput struct {
 type User struct {
 	ID      string   `json:"id"`
 	Phone   string   `json:"phone"`
-	Roles   []Role   `json:"roles"`
 	Profile *Profile `json:"profile,omitempty"`
-}
-
-type Role string
-
-const (
-	RoleCustomer Role = "CUSTOMER"
-	RoleWorker   Role = "WORKER"
-)
-
-var AllRole = []Role{
-	RoleCustomer,
-	RoleWorker,
-}
-
-func (e Role) IsValid() bool {
-	switch e {
-	case RoleCustomer, RoleWorker:
-		return true
-	}
-	return false
-}
-
-func (e Role) String() string {
-	return string(e)
-}
-
-func (e *Role) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = Role(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Role", str)
-	}
-	return nil
-}
-
-func (e Role) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-func (e *Role) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
-	if err != nil {
-		return err
-	}
-	return e.UnmarshalGQL(s)
-}
-
-func (e Role) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	e.MarshalGQL(&buf)
-	return buf.Bytes(), nil
 }
